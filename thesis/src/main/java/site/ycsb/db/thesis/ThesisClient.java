@@ -4,15 +4,13 @@ import site.ycsb.*;
 
 import java.util.*;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 
 /**
@@ -87,55 +85,11 @@ public class ThesisClient extends DB {
         // Simulate a read operation
         result.put("field1", new ByteArrayByteIterator("value1".getBytes()));
 
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("partition", table);
+        jsonObject.put("key", key);
 
-        try {
-
-            URL url = new URL("http://192.168.0.161:8080/api/get");
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            conn.setReadTimeout(1000);
-            
-            // set headers
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept", "application/json");
-
-            // set body
-            String jsonInputString = "{\"key\":\"test\",\"value\":\"test\"}";
-            System.out.println("JSON Input String: " + jsonInputString);
-            try(OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes("utf-8");
-                os.write(input, 0, input.length);			
-            }
-
-            //Getting the response code
-            int responsecode = conn.getResponseCode();
-
-            System.out.println("Response Code: " + responsecode);
-
-            System.out.println("Response Message: " + conn.getResponseMessage());
-
-            if(responsecode > 299) {
-                System.out.println("Error: " + conn.getResponseMessage());
-                return Status.ERROR;
-            }
-
-            try(BufferedReader br = new BufferedReader(
-            new InputStreamReader(conn.getInputStream(), "utf-8"))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                System.out.println(response.toString());
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        request("http://192.168.0.161:8080/api/get", jsonObject.toString());
 
 
         return Status.OK;
@@ -143,24 +97,40 @@ public class ThesisClient extends DB {
 
     @Override
     public Status update(String table, String key, Map<String, ByteIterator> values) {
+        insert(table, key, values);
         System.out.println("Updating in ThesisClient: " + table + ", " + key);
-        // Simulate an update operation
         return Status.OK;
     }
 
     @Override
     public Status insert(String table, String key, Map<String, ByteIterator> values) {
         System.out.println("Inserting into ThesisClient: " + table + ", " + key);
-        // Simulate an insert operation
-        String jsonInputString = "{\"key\":\"" + key + "\", \"value\":\"test\"}";
-        request("http://192.168.0.161:8080/api/insert", jsonInputString);
+  
+        
+        //String jsonInputString = "{\"key\":\"" + key + "\", \"value\":\"test\"}";
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("partition", table);
+            jsonObject.put("key", key);
+            jsonObject.put("value", serializeValues(values));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        request("http://192.168.0.161:8080/api/insert", jsonObject.toString());
+
         return Status.OK;
     }
 
     @Override
     public Status delete(String table, String key) {
         System.out.println("Deleting from ThesisClient: " + table + ", " + key);
-        // Simulate a delete operation
+        
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("partition", table);
+        jsonObject.put("key", key);
+
+        request("http://192.168.0.161:8080/api/remove", jsonObject.toString());
+
         return Status.OK;
     }
 
@@ -169,5 +139,14 @@ public class ThesisClient extends DB {
         System.out.println("Scanning in ThesisClient: " + table + ", starting from " + startkey + ", count: " + recordcount);
         // Simulate a scan operation
         return Status.OK;
+    }
+
+    @SuppressWarnings("unchecked")
+    private String serializeValues(Map<String, ByteIterator> values) throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        for (Map.Entry<String, ByteIterator> entry : values.entrySet()) {
+            jsonObject.put(entry.getKey(), entry.getValue().toString());
+        }
+        return jsonObject.toString();
     }
 }
