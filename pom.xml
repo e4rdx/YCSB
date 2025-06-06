@@ -201,9 +201,10 @@ LICENSE file.
     <module>s3</module>
     <module>seaweedfs</module>
     <module>scylla</module>
-    <module>solr7</module>
+    <!--<module>solr7</module>-->
     <module>tarantool</module>
     <module>tablestore</module>
+    <module>thesis</module>
     <module>voltdb</module>
     <module>zookeeper</module>
   </modules>
