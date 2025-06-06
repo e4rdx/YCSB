@@ -106,6 +106,7 @@ DATABASES = {
     "solr7"        : "site.ycsb.db.solr7.SolrClient",
     "tarantool"    : "site.ycsb.db.TarantoolClient",
     "tablestore"   : "site.ycsb.db.tablestore.TableStoreClient",
+    "thesis"       : "site.ycsb.db.thesis.ThesisClient",
     "zookeeper"    : "site.ycsb.db.zookeeper.ZKClient"
 }
 
@@ -214,7 +215,7 @@ def is_distribution():
 def get_classpath_from_maven(module):
     output_file = tempfile.NamedTemporaryFile(delete=True)
     cmd = ["mvn", "-B", "-pl", "site.ycsb:" + module,
-           "-am", "package", "-DskipTests",
+           "-am", "package", "-DskipTests", "-Dcheckstyle.skip",
            "dependency:list",
            "-DoutputAbsoluteArtifactFilename",
            "-DappendOutput=false",
