@@ -31,6 +31,22 @@ public class ThesisClient extends DB {
                 .version(HttpClient.Version.HTTP_2)
                 .connectTimeout(java.time.Duration.ofSeconds(5))
                 .build();
+        
+        // TODO: Find out why this is not working
+        /*try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(baseUrl + "/api/test"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString("{}"))
+                    .build();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() >= 300) {
+                throw new DBException("Failed to connect to Thesis server at " + baseUrl + ". Status code: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            throw new DBException("Failed to connect to Thesis server at " + baseUrl);
+        }
+        System.out.println("ThesisClient initialized successfully with base URL: " + baseUrl);*/
     }
 
     @Override
