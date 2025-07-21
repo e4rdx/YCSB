@@ -23,7 +23,7 @@
 #   Request distribution: zipfian
 
 exporter=site.ycsb.measurements.exporter.JSONArrayMeasurementsExporter
-exportfile=./experiments/workloada.json
+exportfile=./experiments/workloadb.json
 
 recordcount=20000
 operationcount=10000
@@ -31,8 +31,8 @@ workload=site.ycsb.workloads.CoreWorkload
 
 readallfields=true
 
-readproportion=0.5
-updateproportion=0.5
+readproportion=0.95
+updateproportion=0.05
 scanproportion=0
 insertproportion=0
 

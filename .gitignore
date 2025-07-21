@@ -26,3 +26,5 @@ output*
 
 # ignore experiment output files
 experiments/*.json
+experiments/*/*.json
+experiments/*.csv
