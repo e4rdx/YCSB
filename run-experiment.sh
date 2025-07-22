@@ -1,5 +1,7 @@
 #!/bin/bash
 
+THREADS=5
+
 # Cleanup
 rm -rf experiments/baseline
 rm -rf experiments/dma_copy
@@ -16,11 +18,11 @@ fi
 # loop over all workloads
 for workload in a b; do
     # Load data
-    python3 bin/ycsb load thesis -threads 5 -P workloads/thesis_workload${workload} -p thesis.ip=http://192.168.100.203:8080
+    python3 bin/ycsb load thesis -threads $THREADS -P workloads/thesis_workload${workload} -p thesis.ip=http://192.168.100.60:8080
     cp experiments/workload${workload}.json experiments/baseline/load_workload${workload}.json
 
     # Run experiment
-    python3 bin/ycsb run thesis -threads 5 -P workloads/thesis_workload${workload} -p thesis.ip=http://192.168.100.203:8080
+    python3 bin/ycsb run thesis -threads $THREADS -P workloads/thesis_workload${workload} -p thesis.ip=http://192.168.100.60:8080
     cp experiments/workload${workload}.json experiments/baseline/run_workload${workload}.json
 
     echo "Please reset the database and press Enter to continue..."
@@ -40,11 +42,11 @@ fi
 
 for workload in a b; do
     # Load data
-    python3 bin/ycsb load thesis -threads 5 -P workloads/thesis_workload${workload} -p thesis.ip=http://192.168.100.203:8080
+    python3 bin/ycsb load thesis -threads $THREADS -P workloads/thesis_workload${workload} -p thesis.ip=http://192.168.100.203:8080
     cp experiments/workload${workload}.json experiments/dma_copy/load_workload${workload}.json
 
     # Run experiment
-    python3 bin/ycsb run thesis -threads 5 -P workloads/thesis_workload${workload} -p thesis.ip=http://192.168.100.203:8080
+    python3 bin/ycsb run thesis -threads $THREADS -P workloads/thesis_workload${workload} -p thesis.ip=http://192.168.100.203:8080
     cp experiments/workload${workload}.json experiments/dma_copy/run_workload${workload}.json
 
     echo "Please reset the database and press Enter to continue..."
