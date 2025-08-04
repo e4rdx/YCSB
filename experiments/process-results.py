@@ -3,12 +3,15 @@ import csv
 import json
 import os
 
-workloads = ["a", "b"]
+workloads = ["a", "b", "c"]
 
 fieldnames = ["service", "workload", "load/run", "metric", "measurement", "value"]
 data = []
 
-for s in ["baseline", "dma_copy"]:
+for s in ["baseline", "dma_copy", "baseline-rocks"]:
+    if not os.path.exists(f"./{s}"):
+        print(f"Directory {s} does not exist, skipping...")
+        continue
     for workload in workloads:
         for op in ["load", "run"]:
             filename = f"./{s}/{op}_workload{workload}.json"
