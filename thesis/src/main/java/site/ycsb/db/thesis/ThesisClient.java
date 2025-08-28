@@ -20,12 +20,14 @@ public class ThesisClient extends DB {
 
     private HttpClient httpClient;
     private String baseUrl;
+    private String getMethod;
 
     @Override
     public void init() throws DBException {
         System.out.println("Initializing ThesisClient...");
 
         baseUrl = getProperties().getProperty("thesis.ip", "http://localhost:8080");
+        getMethod = getProperties().getProperty("thesis.get", "comm_ch"); // Options: "http" or "comm_ch"
 
         httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
@@ -81,15 +83,14 @@ public class ThesisClient extends DB {
 
     @Override
     public Status read(String table, String key, Set<String> fields, Map<String, ByteIterator> result) {
-        //System.out.println("Reading from ThesisClient: " + table + ", " + key);
-        
-        //result.put("field1", new ByteArrayByteIterator("value1".getBytes()));
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("partition", table);
         jsonObject.put("key", key);
 
-        request("/api/get", jsonObject.toString());
+        if(getMethod.equals("http"))
+            request("/api/get", jsonObject.toString());
+        else
+            request("/api/get_comm_ch", jsonObject.toString());
 
 
         return Status.OK;
@@ -98,16 +99,11 @@ public class ThesisClient extends DB {
     @Override
     public Status update(String table, String key, Map<String, ByteIterator> values) {
         insert(table, key, values);
-        //System.out.println("Updating in ThesisClient: " + table + ", " + key);
         return Status.OK;
     }
 
     @Override
     public Status insert(String table, String key, Map<String, ByteIterator> values) {
-        //System.out.println("Inserting into ThesisClient: " + table + ", " + key);
-  
-        
-        //String jsonInputString = "{\"key\":\"" + key + "\", \"value\":\"test\"}";
         JSONObject jsonObject = new JSONObject();
         try{
             jsonObject.put("partition", table);
@@ -136,9 +132,8 @@ public class ThesisClient extends DB {
 
     @Override
     public Status scan(String table, String startkey, int recordcount, Set<String> fields, Vector<HashMap<String, ByteIterator>> result) {
-        System.out.println("Scanning in ThesisClient: " + table + ", starting from " + startkey + ", count: " + recordcount);
-        // Simulate a scan operation
-        return Status.OK;
+        System.out.println("Scanning is not implemented in the Database!");
+        return Status.Error;
     }
 
     @SuppressWarnings("unchecked")
