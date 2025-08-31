@@ -29,6 +29,8 @@ public class ThesisClient extends DB {
         baseUrl = getProperties().getProperty("thesis.ip", "http://localhost:8080");
         getMethod = getProperties().getProperty("thesis.get", "comm_ch"); // Options: "http" or "comm_ch"
 
+        System.out.println("Using get endpoint for: " + getMethod);
+
         httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
                 .connectTimeout(java.time.Duration.ofSeconds(5))
@@ -133,7 +135,7 @@ public class ThesisClient extends DB {
     @Override
     public Status scan(String table, String startkey, int recordcount, Set<String> fields, Vector<HashMap<String, ByteIterator>> result) {
         System.out.println("Scanning is not implemented in the Database!");
-        return Status.Error;
+        return Status.OK;
     }
 
     @SuppressWarnings("unchecked")

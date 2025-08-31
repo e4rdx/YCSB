@@ -49,11 +49,13 @@ for workload in a b c; do
     cp experiments/workload${workload}.json experiments/baseline/load_workload${workload}.json
 
     # Run experiment
-    python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline}
+    python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline} -p thesis.get=http
     cp experiments/workload${workload}.json experiments/baseline/run_workload${workload}.json
 
-    echo "Please reset the database and press Enter to continue..."
-    read -r
+    if [ "$workload" != "c" ]; then
+        echo "Please reset the database and press Enter to continue..."
+        read -r
+    fi
 done
 
 
@@ -79,6 +81,8 @@ for workload in a b c; do
     python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${dpu}
     cp experiments/workload${workload}.json experiments/dma_copy/run_workload${workload}.json
 
-    echo "Please reset the database and press Enter to continue..."
-    read -r
+    if [ "$workload" != "c" ]; then
+        echo "Please reset the database and press Enter to continue..."
+        read -r
+    fi
 done
