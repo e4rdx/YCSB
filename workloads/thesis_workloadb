@@ -24,7 +24,7 @@
 exporter=site.ycsb.measurements.exporter.JSONArrayMeasurementsExporter
 exportfile=./experiments/workloadb.json
 
-recordcount=50000000
+recordcount=10000000
 operationcount=10000000
 workload=site.ycsb.workloads.CoreWorkload
 
