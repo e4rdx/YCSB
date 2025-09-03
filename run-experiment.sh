@@ -15,7 +15,7 @@ do
 done
 
 if [ -z "$threads" ]; then
-    threads=5
+    threads=10
 fi
 
 if [ -z "$baseline" ]; then
@@ -43,7 +43,21 @@ if [ ! -d "experiments/baseline" ]; then
   mkdir -p experiments/baseline
 fi
 
+# loop over all workloads
+for workload in a b c d; do
+    # Load data
+    python3 bin/ycsb load thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline}
+    cp experiments/workload${workload}.json experiments/baseline/load_workload${workload}.json
 
+    # Run experiment
+    python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline} -p thesis.get=http
+    cp experiments/workload${workload}.json experiments/baseline/run_workload${workload}.json
+
+    if [ "$workload" != "d" ]; then
+        echo "Please reset the database and press Enter to continue..."
+        read -r
+    fi
+done
 
 echo "Now start dma copy on the host and the dpu"
 echo "On the host, run: cargo run --release -- -c"
@@ -57,7 +71,7 @@ if [ ! -d "experiments/dma_copy" ]; then
   mkdir -p experiments/dma_copy
 fi
 
-for workload in a b c; do
+for workload in a b c d; do
     # Load data
     python3 bin/ycsb load thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${dpu}
     cp experiments/workload${workload}.json experiments/dma_copy/load_workload${workload}.json
@@ -66,7 +80,7 @@ for workload in a b c; do
     python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${dpu}
     cp experiments/workload${workload}.json experiments/dma_copy/run_workload${workload}.json
 
-    if [ "$workload" != "c" ]; then
+    if [ "$workload" != "d" ]; then
         echo "Please reset the database and press Enter to continue..."
         read -r
     fi

@@ -3,7 +3,7 @@ import csv
 import json
 import os
 
-workloads = ["a", "b", "c"]
+workloads = ["a", "b", "c", "d"]
 
 fieldnames = ["service", "workload", "load/run", "metric", "measurement", "value"]
 data = []

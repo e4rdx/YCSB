@@ -14,7 +14,7 @@ do
 done
 
 if [ -z "$threads" ]; then
-    threads=5
+    threads=10
 fi
 
 if [ -z "$baseline" ]; then
@@ -39,7 +39,7 @@ if [ ! -d "experiments/baseline" ]; then
 fi
 
 # loop over all workloads
-for workload in a b c; do
+for workload in a b c d; do
     # Load data
     python3 bin/ycsb load thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline}
     cp experiments/workload${workload}.json experiments/baseline/load_workload${workload}.json
@@ -65,7 +65,7 @@ if [ ! -d "experiments/baseline-rocks" ]; then
   mkdir -p experiments/baseline-rocks
 fi
 
-for workload in a b c; do
+for workload in a b c d; do
     # Load data
     python3 bin/ycsb load thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline}
     cp experiments/workload${workload}.json experiments/baseline-rocks/load_workload${workload}.json
