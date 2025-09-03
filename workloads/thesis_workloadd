@@ -29,16 +29,16 @@
 exporter=site.ycsb.measurements.exporter.JSONArrayMeasurementsExporter
 exportfile=./experiments/workloadd.json
 
-recordcount=10
-operationcount=10
+recordcount=10000000
+operationcount=10000000
 workload=site.ycsb.workloads.CoreWorkload
 
 readallfields=true
 
-readproportion=0.90
+readproportion=0.95
 updateproportion=0
 scanproportion=0
-insertproportion=0.1
+insertproportion=0.05
 
 requestdistribution=latest
 
