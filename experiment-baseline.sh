@@ -14,7 +14,7 @@ do
 done
 
 if [ -z "$threads" ]; then
-    threads=10
+    threads=50
 fi
 
 if [ -z "$baseline" ]; then
@@ -48,7 +48,7 @@ for workload in a b c d; do
     python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline} -p thesis.get=http
     cp experiments/workload${workload}.json experiments/baseline/run_workload${workload}.json
 
-    if [ "$workload" != "c" ]; then
+    if [ "$workload" != "d" ]; then
         echo "Please reset the database and press Enter to continue..."
         read -r
     fi
@@ -74,7 +74,7 @@ for workload in a b c d; do
     python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline} -p thesis.get=http
     cp experiments/workload${workload}.json experiments/baseline-rocks/run_workload${workload}.json
 
-    if [ "$workload" != "c" ]; then
+    if [ "$workload" != "d" ]; then
         echo "Please reset the database and press Enter to continue..."
         read -r
     fi

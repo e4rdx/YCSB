@@ -5,10 +5,6 @@ def request(url, data):
     headers = {"Content-Type": "application/json"}
     try:
         response = requests.post(url, json=data, headers=headers)
-        #response.raise_for_status()  # Raise an error for HTTP codes 4xx/5xx
-        #print("Response status code:", response.status_code)
-        #print("Response JSON:", response.json())
-        #print("response text:", response.text)
         return response.text
     except requests.exceptions.RequestException as e:
         print("An error occurred:", e)
@@ -38,7 +34,7 @@ shuffle(indices)
 errors = False
 
 for i in indices:
-    url = f"http://{ip}:{target}/api/get"
+    url = f"http://{ip}:{target}/api/get_comm_ch"
     data = {
         "key": str(i),
         "partition": "default"

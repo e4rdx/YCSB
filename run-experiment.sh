@@ -15,7 +15,7 @@ do
 done
 
 if [ -z "$threads" ]; then
-    threads=10
+    threads=50
 fi
 
 if [ -z "$baseline" ]; then
@@ -77,8 +77,10 @@ for workload in a b c d; do
     cp experiments/workload${workload}.json experiments/dma_copy/load_workload${workload}.json
 
     # Run experiment
-    python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${dpu}
+    python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${dpu} #-p thesis.get=http
     cp experiments/workload${workload}.json experiments/dma_copy/run_workload${workload}.json
+
+    #curl -X POST http://192.168.100.203:8080/api/info
 
     if [ "$workload" != "d" ]; then
         echo "Please reset the database and press Enter to continue..."
