@@ -51,7 +51,7 @@ for workload in a b c d; do
     fi
 
     # Run experiment
-    python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${dpu} -p thesis.get=http
+    python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${dpu} #-p thesis.get=http
     cp experiments/workload${workload}.json experiments/dma_copy/run_workload${workload}.json
 
     #curl -X POST http://192.168.100.203:8080/api/info
