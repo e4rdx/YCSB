@@ -40,17 +40,25 @@ if [ ! -d "experiments/baseline" ]; then
   mkdir -p experiments/baseline
 fi
 
-# loop over all workloads
+echo "Please start the baseline-rocks experiment on the host using 'cargo run --release -- -c' and press Enter to continue..."
+read -r
+
+# check if ../experiments/baseline-rocks exists
+if [ ! -d "experiments/baseline-rocks" ]; then
+  echo "Creating directory experiments/baseline-rocks"
+  mkdir -p experiments/baseline-rocks
+fi
+
 for workload in a b c d; do
     # Load data
     if [ "$workload" != "d" ]; then
         python3 bin/ycsb load thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline}
-        cp experiments/workload${workload}.json experiments/baseline/load_workload${workload}.json
+        cp experiments/workload${workload}.json experiments/baseline-rocks/load_workload${workload}.json
     fi
 
     # Run experiment
     python3 bin/ycsb run thesis -threads $threads -P workloads/thesis_workload${workload} -p thesis.ip=${baseline} -p thesis.get=http
-    cp experiments/workload${workload}.json experiments/baseline/run_workload${workload}.json
+    cp experiments/workload${workload}.json experiments/baseline-rocks/run_workload${workload}.json
 
     # Wait for reset after a and b only
     if [ "$workload" = "a" ] || [ "$workload" = "b" ]; then
