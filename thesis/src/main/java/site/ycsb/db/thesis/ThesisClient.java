@@ -78,6 +78,10 @@ public class ThesisClient extends DB {
                 System.out.println("Error: " + response.body());
                 return;
             }
+            if(response.body() == "Not Found") {
+                System.out.println("Error: Key not found!");
+                return;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
