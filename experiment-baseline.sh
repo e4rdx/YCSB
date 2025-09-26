@@ -14,7 +14,7 @@ do
 done
 
 if [ -z "$threads" ]; then
-    threads=50
+    threads=60
 fi
 
 if [ -z "$baseline" ]; then

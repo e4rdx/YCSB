@@ -14,7 +14,7 @@ do
 done
 
 if [ -z "$threads" ]; then
-    threads=50
+    threads=60
 fi
 
 if [ -z "$baseline" ]; then
@@ -30,9 +30,6 @@ read -p "Press Enter to continue or Ctrl+C to abort..."
 rm -r experiments/baseline
 rm -r experiments/baseline-rocks
 rm -r experiments/dma_copy
-
-echo "Please start the baseline experiment on the host using 'cargo run --release -- -c' and press Enter to continue..."
-read -r
 
 # check if ../experiments/baseline exists
 if [ ! -d "experiments/baseline" ]; then
