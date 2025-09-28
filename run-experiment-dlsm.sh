@@ -33,7 +33,7 @@ rm -r experiments/dma_copy
 
 echo "Now start dma copy on the host and the dpu"
 echo "On the host, run: cargo run --release -- -c"
-echo "On the DPU, run: cargo run --release -- --api-url=<http://host-ip:9090> -c"
+echo "On the DPU, run: cargo run --release -- --api-url=<host-ip:9090> -c"
 echo "Then press Enter to continue..."
 read -r
 
